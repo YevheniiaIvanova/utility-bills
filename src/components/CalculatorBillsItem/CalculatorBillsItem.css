@@ -1,0 +1,17 @@
+.bill-item__content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.bill-item__label {
+  display: block;
+  width: 260px;
+}
+
+.bill-item__input {
+  padding: 10px;
+  border: 2px solid var(--primary-color, #62c7c3);
+  max-width: 120px;
+}
