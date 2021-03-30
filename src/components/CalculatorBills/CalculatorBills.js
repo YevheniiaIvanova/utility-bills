@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
-import CalculatorBillsItem from '../CalculatorBillsItem'
+import CalculatorBillsItem from '../CalculatorBillsItem';
+import config from '../../config';
+import Alert from '../Alert';
 import './CalculatorBills.css';
+import styles from '../button.module.css';
+
+const {garbageBills, homeMaintenance, rentBills, waterTariff, electricityTariff} = config;
 
 function calculateTheCostWithTariff(previousValue, currentValue, tariff) {
   return (Math.abs(currentValue - previousValue)) * tariff;
@@ -13,20 +18,12 @@ function calculateFullCost(...costBills) {
 }
 
 const CalculatorBills = () => {
-  //TODO: Вынести во внешний ресурс
-  const garbageBills = 25.02;
-  const homeMaintenance = 267.33; 
-  const rentBills = 5000;
-
-  const waterTariff = 25.28;
-  const electricityTariff = 1.68; 
-
-
   const [previousWaterValue, setPreviousWaterValue] = useState('');
   const [currentWaterValue, setCurrentWaterValue] = useState('');
   const [previousElectricityValue, setPreviousElectricityValue] = useState('');
   const [currentElectricityValue, setCurrentElectricityValue] = useState('');
   const [totalCost, setTotalCost] = useState('');
+  const [isCloseAlert, setIsCloseAlert] = useState(false);
 
   //TODO: Негибкая система, много повторяющегося кода(как-то нужно оптимизировать)
   //TODO: Продумать валидирование ввода в инпут и вывод popup(отдельный компонент)
@@ -47,20 +44,27 @@ const CalculatorBills = () => {
     setCurrentElectricityValue(event.currentTarget.value);
   } 
 
-  const validateInputValues = (...values) => {
-    return values.every(value => value.match(/^[0-9]+$/));
+  const isNotEmptyValue = (...values) => {
+    return values.every(value => !!value);
+  }
+
+  const closeAlertHandler = () => {
+    setIsCloseAlert(false);
   }
 
   const calculateTheCost = (event) => {
     event.preventDefault();
-    const isValid = validateInputValues(previousWaterValue, currentWaterValue, previousElectricityValue, currentElectricityValue);
+    const isNotEmptyValues = isNotEmptyValue(previousWaterValue, 
+                                             currentWaterValue, 
+                                             previousElectricityValue, 
+                                             currentElectricityValue);
     
-    if(isValid) {
+    if(isNotEmptyValues) {
       const waterBill = calculateTheCostWithTariff(previousWaterValue, currentWaterValue, waterTariff);
       const electricityBill = calculateTheCostWithTariff(previousElectricityValue, currentElectricityValue, electricityTariff);
       setTotalCost(calculateFullCost(homeMaintenance, garbageBills, waterBill, electricityBill, rentBills));  
     } else {
-      alert("Введите значения");
+      setIsCloseAlert(true);
     }
   }
 
@@ -102,10 +106,11 @@ const CalculatorBills = () => {
           </div>
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
-         
-          <input type="submit" className="calculator-bills__button" value="Расчитать"/>
+          {/*TODO: Добавить кнопку очистки полей */ }
+          <input type="submit" className={ styles.button } value="Расчитать"/>
         </form>
       </div>
+        {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
     </div>
   );
 }

@@ -14,4 +14,5 @@
   padding: 10px;
   border: 2px solid var(--primary-color, #62c7c3);
   max-width: 120px;
+  border-radius: 5px;
 }

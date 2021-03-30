@@ -1,4 +1,5 @@
 import React from 'react';
+import NumericInput from '../NumericInput';
 import './CalculatorBillsItem.css';
 
 const CalculatorBillsItem = (props) => {
@@ -19,13 +20,13 @@ const CalculatorBillsItem = (props) => {
         <label className="bill-item__label">
           Текущее значение счетчика:
         </label>
-        <input type="text" className="bill-item__input" value={currentValue} onInput={onInputCurrentValue} placeholder='###' />
+        <NumericInput className='bill-item__input' value={currentValue} onInput={onInputCurrentValue} />
       </p>
       <p className="bill-item__content">
         <label className="bill-item__label">
           Предыдущее значение счетчика:
         </label>
-        <input type="text" className="bill-item__input" value={previousValue} onInput={onInputPreviousValue} placeholder='###' />
+        <NumericInput className='bill-item__input' value={previousValue} onInput={onInputPreviousValue}/>
       </p>
     </div>
   );
