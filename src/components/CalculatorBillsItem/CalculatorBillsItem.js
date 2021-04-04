@@ -20,13 +20,13 @@ const CalculatorBillsItem = (props) => {
         <label className="bill-item__label">
           Текущее значение счетчика:
         </label>
-        <NumericInput className='bill-item__input' value={currentValue} onInput={onInputCurrentValue} />
+        <NumericInput className='bill-item__input' value={currentValue} onInput={onInputCurrentValue(title)} />
       </p>
       <p className="bill-item__content">
         <label className="bill-item__label">
           Предыдущее значение счетчика:
         </label>
-        <NumericInput className='bill-item__input' value={previousValue} onInput={onInputPreviousValue}/>
+        <NumericInput className='bill-item__input' value={previousValue} onInput={onInputPreviousValue(title)}/>
       </p>
     </div>
   );

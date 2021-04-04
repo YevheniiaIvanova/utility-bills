@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
-import CalculatorBillsItem from '../CalculatorBillsItem';
 import config from '../../config';
+import CalculatorBillsList from '../CalculatorBillsList';
+import Controls from '../Controls';
 import Alert from '../Alert';
 import './CalculatorBills.css';
-import styles from '../button.module.css';
+
 
 const {garbageBills, homeMaintenance, rentBills, waterTariff, electricityTariff} = config;
 
-function calculateTheCostWithTariff(previousValue, currentValue, tariff) {
+function calculateTheCostWithTariff(bill) {
+  const {previousValue, currentValue, tariff} = bill; 
   return (Math.abs(currentValue - previousValue)) * tariff;
 }
 
@@ -18,34 +20,45 @@ function calculateFullCost(...costBills) {
 }
 
 const CalculatorBills = () => {
-  const [previousWaterValue, setPreviousWaterValue] = useState('');
-  const [currentWaterValue, setCurrentWaterValue] = useState('');
-  const [previousElectricityValue, setPreviousElectricityValue] = useState('');
-  const [currentElectricityValue, setCurrentElectricityValue] = useState('');
+  
+  const [bills, setBills] = useState([
+    {title: 'Вода', tariff: waterTariff, previousValue: '', currentValue: ''},
+    {title: 'Электричество', tariff: electricityTariff, previousValue: '', currentValue: ''},
+  ]);
+
   const [totalCost, setTotalCost] = useState('');
   const [isCloseAlert, setIsCloseAlert] = useState(false);
 
-  //TODO: Негибкая система, много повторяющегося кода(как-то нужно оптимизировать)
-  //TODO: Продумать валидирование ввода в инпут и вывод popup(отдельный компонент)
   //TODO: Добавить функционал добавление нового платежа (допусти за газ) и редактирование существующего
-  const onInputPreviousWaterValue = (event) => {
-    setPreviousWaterValue(event.currentTarget.value);
+  
+  const inputPreviousValue = (title) => {
+    return function(event) {
+      const previousValue = event.currentTarget.value;
+      setBills((bills) => { 
+        const copyBills = [...bills];
+        const bill = copyBills.find(bill => bill.title === title);
+        bill.previousValue = previousValue;
+        return copyBills;
+      });
+    }
   }
   
-  const onInputCurrentWaterValue = (event) => {
-    setCurrentWaterValue(event.currentTarget.value);
-  } 
   
-  const onInputPreviousElectricityValue = (event) => {
-    setPreviousElectricityValue(event.currentTarget.value);
-  }
-  
-  const onInputCurrentElectricityValue = (event) => {
-    setCurrentElectricityValue(event.currentTarget.value);
+  const inputCurrentValue = (title) => {
+    return function(event) {
+      const currentValue = event.currentTarget.value;
+      setBills((bills) => { 
+        const copyBills = [...bills];
+        const bill = copyBills.find(bill => bill.title === title);
+        bill.currentValue = currentValue;   
+        return copyBills;
+      });
+    }
   } 
 
-  const isNotEmptyValue = (...values) => {
-    return values.every(value => !!value);
+
+  const isNotEmptyValue = (values) => {
+    return values.every(value => value.previousValue && value.currentValue);
   }
 
   const closeAlertHandler = () => {
@@ -54,26 +67,29 @@ const CalculatorBills = () => {
 
   const calculateTheCost = (event) => {
     event.preventDefault();
-    const isNotEmptyValues = isNotEmptyValue(previousWaterValue, 
-                                             currentWaterValue, 
-                                             previousElectricityValue, 
-                                             currentElectricityValue);
+    const isNotEmptyValues = isNotEmptyValue(bills);
     
     if(isNotEmptyValues) {
-      const waterBill = calculateTheCostWithTariff(previousWaterValue, currentWaterValue, waterTariff);
-      const electricityBill = calculateTheCostWithTariff(previousElectricityValue, currentElectricityValue, electricityTariff);
-      setTotalCost(calculateFullCost(homeMaintenance, garbageBills, waterBill, electricityBill, rentBills));  
+      const totalCostBills = bills.map(bill => calculateTheCostWithTariff(bill));
+      setTotalCost(calculateFullCost(homeMaintenance, garbageBills, rentBills, ...totalCostBills));  
     } else {
       setIsCloseAlert(true);
     }
   }
 
-  //TODO: CHECK how correctly update state in Hooks
+
   const clearAllValues = () => {
-    setPreviousWaterValue('');
-    setCurrentWaterValue('');
-    setPreviousElectricityValue('');
-    setCurrentElectricityValue('');
+    setBills(() => {
+      const newBills = bills.map(bill => {
+        const newBill = {...bill};
+        newBill.previousValue = '';
+        newBill.currentValue = '';
+        return newBill;
+      });
+
+      return newBills;
+    });
+
     setTotalCost('');
   }
 
@@ -99,26 +115,14 @@ const CalculatorBills = () => {
               </li>
             </ul>
           </div>
-          <div className="calculator-bills__list">
-            <CalculatorBillsItem title='Вода' tariff={waterTariff} 
-                                 previousValue={previousWaterValue} 
-                                 currentValue={currentWaterValue}
-                                 onInputPreviousValue={onInputPreviousWaterValue}
-                                 onInputCurrentValue={onInputCurrentWaterValue}
-            />
-            <CalculatorBillsItem title='Электричество' tariff={electricityTariff}
-                                 previousValue={previousElectricityValue} 
-                                 currentValue={currentElectricityValue}
-                                 onInputPreviousValue={onInputPreviousElectricityValue}
-                                 onInputCurrentValue={onInputCurrentElectricityValue}
-            />
-          </div>
+          <CalculatorBillsList 
+            billsData={bills} 
+            onInputPreviousValue={inputPreviousValue} 
+            onInputCurrentValue={inputCurrentValue}
+          />
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
-            <div className="controls">
-              <input type="submit" className={ styles.button } value="Расчитать"/>   
-              <button type="button" className={ styles.button } onClick={clearAllValues}>Очистить</button>
-            </div>
+            <Controls onClearAllValues={clearAllValues} />
         </form>
       </div>
         {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
