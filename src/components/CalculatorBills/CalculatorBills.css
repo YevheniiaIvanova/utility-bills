@@ -11,13 +11,13 @@
   text-align: center;
 }
 .calculator-bills {
-  height: 100%;
   display: flex;
+  flex: 1 0 auto;
   justify-content: center;
   align-items: center;
   background-color: var(--second-color, #e6e6e6);
   line-height: 1.5;
-  color: var(--dark-color, #252525)
+  color: var(--dark-color, #252525);
 }
 
 .calculator-bills__container {

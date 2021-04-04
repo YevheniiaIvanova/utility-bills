@@ -68,6 +68,15 @@ const CalculatorBills = () => {
     }
   }
 
+  //TODO: CHECK how correctly update state in Hooks
+  const clearAllValues = () => {
+    setPreviousWaterValue('');
+    setCurrentWaterValue('');
+    setPreviousElectricityValue('');
+    setCurrentElectricityValue('');
+    setTotalCost('');
+  }
+
 
   return (
     <div className="calculator-bills">
@@ -106,8 +115,10 @@ const CalculatorBills = () => {
           </div>
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
-          {/*TODO: Добавить кнопку очистки полей */ }
-          <input type="submit" className={ styles.button } value="Расчитать"/>
+            <div className="controls">
+              <input type="submit" className={ styles.button } value="Расчитать"/>   
+              <button type="button" className={ styles.button } onClick={clearAllValues}>Очистить</button>
+            </div>
         </form>
       </div>
         {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
