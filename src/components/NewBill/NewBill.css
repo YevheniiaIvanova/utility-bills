@@ -1,0 +1,6 @@
+.new-bill {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 2px solid var(--primary-color, #62c7c3);
+  border-bottom: 2px solid var(--primary-color, #62c7c3);
+}

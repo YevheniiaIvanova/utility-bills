@@ -3,6 +3,7 @@ import config from '../../config';
 import CalculatorBillsList from '../CalculatorBillsList';
 import Controls from '../Controls';
 import Alert from '../Alert';
+import NewBill from '../NewBill';
 import './CalculatorBills.css';
 
 
@@ -28,8 +29,10 @@ const CalculatorBills = () => {
 
   const [totalCost, setTotalCost] = useState('');
   const [isCloseAlert, setIsCloseAlert] = useState(false);
+  const [isShowNewBillBlock, setIsShowNewBillBlock] = useState(false);
+  const [newBill, setNewBill] = useState({title: '', tariff: '', previousValue: '', currentValue: '' });
 
-  //TODO: Добавить функционал добавление нового платежа (допусти за газ) и редактирование существующего
+  //TODO: Добавить функционал редактирование существующего счёта
   
   const inputPreviousValue = (title) => {
     return function(event) {
@@ -93,6 +96,45 @@ const CalculatorBills = () => {
     setTotalCost('');
   }
 
+  const onAddButtonHandler = () => {
+    setIsShowNewBillBlock(true);
+  }
+
+  const onInputNewBillTitle = (event) => {
+    // TODO: Исправить валидацию
+    const titleNewBill = event.currentTarget.value.match(/^[А-Яа-я, a-zA-Z]*$/);
+    if(titleNewBill) {
+      setNewBill((newBill) => {
+        return {
+          ...newBill,
+          title: titleNewBill
+        }
+      });
+    }
+  }
+
+  const onInputNewBillTariff = (event) => {
+    const tariffNewBill = event.currentTarget.value;
+    setNewBill((newBill) => {
+      return {
+        ...newBill,
+        tariff: tariffNewBill
+      }
+    });
+  }
+
+  const addNewBill = () => {
+    if(newBill.title && newBill.tariff) {
+      setBills((bills) => {
+        const copyBills = [...bills, newBill];
+        return copyBills;
+      });
+      /* TODO: подумать сразу скрывать или же добавить кнопку закрытия + добавить плавную анимацию */
+      setIsShowNewBillBlock(false);
+    } else {
+      setIsCloseAlert(true);
+    }
+  }
 
   return (
     <div className="calculator-bills">
@@ -120,9 +162,17 @@ const CalculatorBills = () => {
             onInputPreviousValue={inputPreviousValue} 
             onInputCurrentValue={inputCurrentValue}
           />
+            { isShowNewBillBlock && <NewBill 
+                            heading="Добавить новый счёт"
+                            billData={newBill}
+                            onSave={addNewBill} 
+                            onInputNewBillTariff={onInputNewBillTariff} 
+                            onInputNewBillTitle={onInputNewBillTitle}/> 
+            }
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
-            <Controls onClearAllValues={clearAllValues} />
+
+            <Controls onClearAllValues={clearAllValues} onAddButtonHandler={onAddButtonHandler}/>
         </form>
       </div>
         {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}

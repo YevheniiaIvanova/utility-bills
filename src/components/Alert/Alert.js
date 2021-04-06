@@ -1,6 +1,6 @@
 import React from 'react';
 import './Alert.css';
-import styles from '../button.module.css';
+import styles from '../../styles/button.module.css';
 
 const Alert = ({message, title, icon, onClick}) => {
 
