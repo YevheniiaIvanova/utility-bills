@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import config from '../../config';
 import CalculatorBillsList from '../CalculatorBillsList';
 import Controls from '../Controls';
+import FormTitle from '../../FormComponents/FormTitle/FormTitle';
 import Alert from '../Alert';
 import NewBill from '../NewBill';
 import './CalculatorBills.css';
@@ -101,16 +102,13 @@ const CalculatorBills = () => {
   }
 
   const onInputNewBillTitle = (event) => {
-    // TODO: Исправить валидацию
-    const titleNewBill = event.currentTarget.value.match(/^[А-Яа-я, a-zA-Z]*$/);
-    if(titleNewBill) {
-      setNewBill((newBill) => {
-        return {
-          ...newBill,
-          title: titleNewBill
-        }
-      });
-    }
+    const titleNewBill = event.currentTarget.value;
+    setNewBill((newBill) => {
+      return {
+        ...newBill,
+        title: titleNewBill
+      }
+    });
   }
 
   const onInputNewBillTariff = (event) => {
@@ -144,7 +142,7 @@ const CalculatorBills = () => {
         </header>
         <form className="bills" onSubmit={calculateTheCost}>
           <div className="static-bill bill">
-            <h2 className="title bill__title static-bill__title">Статические счета</h2>
+            <FormTitle heading="Статические счета" className="static-bill__title" />
             <ul className="static-bill__list">
               <li className="static-bill__item">
                 Аренда квартиры: {rentBills} грн

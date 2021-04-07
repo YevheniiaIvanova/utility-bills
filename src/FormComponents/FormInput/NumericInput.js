@@ -1,6 +1,7 @@
 import React from 'react';
+import './FormInput.css';
 
-const NumericInput = ({onInput, value, className, ...otherProps}) => {
+const NumericInput = ({onInput, value, className,...otherProps}) => {
 
   const inputHandler = (event) => {
    const isValid = event.currentTarget.value.match(/^[0-9]*$/);
@@ -10,7 +11,7 @@ const NumericInput = ({onInput, value, className, ...otherProps}) => {
   }
 
   return (
-    <input {...otherProps} type="text" className={className} value={value} onInput={inputHandler} placeholder='###'/>
+    <input {...otherProps} type="text" className={`form-input ${className}`} value={value} onInput={inputHandler}/>
   );
 }
 

@@ -48,12 +48,6 @@
   margin-bottom: 20px;
 }
 
-.bill__title {
-  font-size: 20px;
-  margin-bottom: 25px;
-  color: var(--primary-color, #62c7c3);
-}
-
 .static-bill__item {
   margin-bottom: 5px;
 }

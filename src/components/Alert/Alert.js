@@ -1,6 +1,6 @@
 import React from 'react';
 import './Alert.css';
-import styles from '../../styles/button.module.css';
+import FormButton from '../../FormComponents/FormButton/FormButton';
 
 const Alert = ({message, title, icon, onClick}) => {
 
@@ -9,7 +9,7 @@ const Alert = ({message, title, icon, onClick}) => {
       <div className="alert">
         <h1 className="alert__title"><span className="alert__icon">{icon}</span>{title}</h1>
         <p className="alert__text">{message}</p>
-        <button className={styles.button} onClick={onClick}>Ok</button>
+        <FormButton heading="Ok" onClick={onClick}/>
       </div>
     </div>
   );

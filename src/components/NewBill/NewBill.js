@@ -1,24 +1,26 @@
 import React from 'react';
-import NumericInput from '../NumericInput';
+import FormTitle from '../../FormComponents/FormTitle/FormTitle';
+import FloatInput from '../../FormComponents/FormInput/FloatInput';
+import NoNumericInput from '../../FormComponents/FormInput/NoNumericInput';
+import FormButton from '../../FormComponents/FormButton/FormButton';
 import './NewBill.css';
-import styles from '../../styles/button.module.css';
+
 
 const NewBill = ({heading, billData, onSave, onInputNewBillTariff, onInputNewBillTitle}) => {
   const {title, tariff} = billData;
   return (
     /* TODO: стили вынести в модуль */
     <div className="new-bill bill">
-      <h2 className="new-bill__title bill__title title">{heading}</h2>
+      <FormTitle heading={heading} />
       <p className="new-bill__content bill-item__content">
         <label className="bill-item__label" htmlFor="">Введите название счёта:</label>
-        <input type="text" className="bill-item__input" placeholder="name" value={title} onInput={onInputNewBillTitle}/>
+        <NoNumericInput  placeholder="name" value={title} onInput={onInputNewBillTitle}/>
       </p>
       <p className="new-bill__content bill-item__content">
         <label className="bill-item__label" htmlFor="">Введите тариф счёта:</label>
-        {/* TODO: Исправить Валидацию, точка или запятая должны быть */}
-        <NumericInput className='bill-item__input' value={tariff} onInput={onInputNewBillTariff}/>
+        <FloatInput className='bill-item__input' value={tariff} onInput={onInputNewBillTariff} placeholder='###'/>
       </p>
-      <button type="button" className={ styles.button } onClick={onSave}>Сохранить</button>
+      <FormButton heading="Сохранить" onClick={onSave} />
     </div>
   );
 }
