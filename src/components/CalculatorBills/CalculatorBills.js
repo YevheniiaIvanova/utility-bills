@@ -32,6 +32,27 @@ const CalculatorBills = () => {
   const [isCloseAlert, setIsCloseAlert] = useState(false);
   const [isShowNewBillBlock, setIsShowNewBillBlock] = useState(false);
   const [newBill, setNewBill] = useState({title: '', tariff: '', previousValue: '', currentValue: '' });
+  const [isDeleteBill, setIsDeleteBill] = useState(false);
+  const [isEditBill, setIsEditBill] = useState(false);
+
+  //Buttons Handlers
+  const closeAlertHandler = () => {
+    setIsCloseAlert(false);
+  }
+  
+  const onAddButtonHandler = () => {
+    setIsShowNewBillBlock(true);
+  }
+
+  const onEditButtonHandler = () => {
+    setIsEditBill(true);
+  }
+
+  const onDeleteButtonHandler = () => {
+    setIsDeleteBill(true);
+  }
+
+
 
   //TODO: Добавить функционал редактирование существующего счёта
   
@@ -65,9 +86,6 @@ const CalculatorBills = () => {
     return values.every(value => value.previousValue && value.currentValue);
   }
 
-  const closeAlertHandler = () => {
-    setIsCloseAlert(false);
-  }
 
   const calculateTheCost = (event) => {
     event.preventDefault();
@@ -97,9 +115,6 @@ const CalculatorBills = () => {
     setTotalCost('');
   }
 
-  const onAddButtonHandler = () => {
-    setIsShowNewBillBlock(true);
-  }
 
   const onInputNewBillTitle = (event) => {
     const titleNewBill = event.currentTarget.value;
@@ -134,6 +149,19 @@ const CalculatorBills = () => {
     }
   }
 
+  const deleteBill = (title) => {
+    return function() {
+      setBills((bills) => {
+        const copyBills = [...bills];
+        return copyBills.filter(bill => bill.title !== title);
+      });
+    }
+  }
+
+  const editBill = (title) => {
+
+  }
+
   return (
     <div className="calculator-bills">
       <div className="calculator-bills__container">
@@ -159,18 +187,25 @@ const CalculatorBills = () => {
             billsData={bills} 
             onInputPreviousValue={inputPreviousValue} 
             onInputCurrentValue={inputCurrentValue}
+            isDeleteBill={isDeleteBill}
+            onDeleteBill={deleteBill}
           />
             { isShowNewBillBlock && <NewBill 
-                            heading="Добавить новый счёт"
-                            billData={newBill}
-                            onSave={addNewBill} 
-                            onInputNewBillTariff={onInputNewBillTariff} 
-                            onInputNewBillTitle={onInputNewBillTitle}/> 
+                                      heading="Добавить новый счёт"
+                                      billData={newBill}
+                                      onSave={addNewBill} 
+                                      onInputNewBillTariff={onInputNewBillTariff} 
+                                      onInputNewBillTitle={onInputNewBillTitle}/> 
             }
+            
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
 
-            <Controls onClearAllValues={clearAllValues} onAddButtonHandler={onAddButtonHandler}/>
+            <Controls onClearAllValues={clearAllValues} 
+                      onAddButtonHandler={onAddButtonHandler}
+                      onEditButtonHandler={onEditButtonHandler}
+                      onDeleteButtonHandler={onDeleteButtonHandler}
+            />
         </form>
       </div>
         {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}

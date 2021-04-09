@@ -1,7 +1,7 @@
 import React from 'react';
 import './FormInput.css';
 
-const NoNumericInput = ({onInput, value, className, ...otherProps}) => {
+const NoNumericInput = ({onInput, value, className='', ...otherProps}) => {
   const inputHandler = (event) => {
     const isValid = event.currentTarget.value.match(/^[А-Яа-я, a-zA-Z]*$/);
     if(isValid) {

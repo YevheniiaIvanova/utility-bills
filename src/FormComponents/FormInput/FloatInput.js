@@ -1,7 +1,7 @@
 import React from 'react';
 import './FormInput.css';
 
-const FloatInput = ({onInput, value, className, ...otherProps}) => {
+const FloatInput = ({onInput, value, className='', ...otherProps}) => {
   const inputHandler = (event) => {
     const isValid = event.currentTarget.value.match(/^[0-9]*\.?[0-9]*$/);
     if(isValid) {
