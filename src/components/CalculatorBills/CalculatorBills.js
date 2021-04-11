@@ -143,6 +143,13 @@ const CalculatorBills = () => {
         return copyBills;
       });
       /* TODO: подумать сразу скрывать или же добавить кнопку закрытия + добавить плавную анимацию */
+      setNewBill((newBill) => {
+        return {
+          ...newBill,
+          title: '', 
+          tariff: '',
+        };
+      });
       setIsShowNewBillBlock(false);
     } else {
       setIsCloseAlert(true);
