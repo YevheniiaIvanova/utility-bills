@@ -5,6 +5,7 @@ import Controls from '../Controls';
 import FormTitle from '../../FormComponents/FormTitle/FormTitle';
 import Alert from '../Alert';
 import NewBill from '../NewBill';
+import EditBill from '../EditBill';
 import './CalculatorBills.css';
 
 
@@ -29,7 +30,7 @@ const CalculatorBills = () => {
   ]);
 
   const [totalCost, setTotalCost] = useState('');
-  const [isCloseAlert, setIsCloseAlert] = useState(false);
+  const [alertType, setAlertType] = useState('');
   const [isShowNewBillBlock, setIsShowNewBillBlock] = useState(false);
   const [newBill, setNewBill] = useState({title: '', tariff: '', previousValue: '', currentValue: '' });
   const [isDeleteBill, setIsDeleteBill] = useState(false);
@@ -37,7 +38,7 @@ const CalculatorBills = () => {
 
   //Buttons Handlers
   const closeAlertHandler = () => {
-    setIsCloseAlert(false);
+    setAlertType('');
   }
   
   const onAddButtonHandler = () => {
@@ -95,7 +96,7 @@ const CalculatorBills = () => {
       const totalCostBills = bills.map(bill => calculateTheCostWithTariff(bill));
       setTotalCost(calculateFullCost(homeMaintenance, garbageBills, rentBills, ...totalCostBills));  
     } else {
-      setIsCloseAlert(true);
+      setAlertType('emptyValues');
     }
   }
 
@@ -152,7 +153,7 @@ const CalculatorBills = () => {
       });
       setIsShowNewBillBlock(false);
     } else {
-      setIsCloseAlert(true);
+      setAlertType('emptyValues');
     }
   }
 
@@ -165,8 +166,24 @@ const CalculatorBills = () => {
     }
   }
 
-  const editBill = (title) => {
-
+  const editBill = () => {
+    if(newBill.title && newBill.tariff) {
+      setBills((bills) => {
+        const copyBills = [...bills];
+        const indexBill  = copyBills.findIndex(bill => bill.title === newBill.title);
+        if(indexBill !== -1) {
+          copyBills[indexBill] = {...newBill};
+          return copyBills;
+        } else {
+          setAlertType('nonExistentValue');
+        }
+        return bills;
+        
+      });
+    } else {
+      setAlertType('emptyValues');
+     
+    }
   }
 
   return (
@@ -205,6 +222,14 @@ const CalculatorBills = () => {
                                       onInputNewBillTitle={onInputNewBillTitle}/> 
             }
             
+            {isEditBill && <EditBill 
+                              heading="Редактировать тариф счёта"
+                              billData={newBill}
+                              onSave={editBill} 
+                              onInputNewBillTariff={onInputNewBillTariff} 
+                              onInputNewBillTitle={onInputNewBillTitle}/> 
+
+            } 
             {/*TODO: Более подробный вывод, чтобы было понятно как посчитано?*/ }
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
 
@@ -215,7 +240,8 @@ const CalculatorBills = () => {
             />
         </form>
       </div>
-        {isCloseAlert && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
+        {alertType==='emptyValues' && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
+        {alertType==='nonExistentValue' && <Alert message='Такого значения нет!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
     </div>
   );
 }
