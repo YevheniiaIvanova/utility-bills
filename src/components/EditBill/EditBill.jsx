@@ -2,7 +2,7 @@ import React from 'react';
 import FormTitle from '../../FormComponents/FormTitle/FormTitle';
 import FloatInput from '../../FormComponents/FormInput/FloatInput';
 import NoNumericInput from '../../FormComponents/FormInput/NoNumericInput';
-import FormButton from '../../FormComponents/FormButton/FormButton';
+import Button from '../../FormComponents/Buttons/Button';
 
 const EditBill = ({heading, billData, onSave, onInputNewBillTariff, onInputNewBillTitle}) => {
   const {title, tariff} = billData;
@@ -18,8 +18,7 @@ const EditBill = ({heading, billData, onSave, onInputNewBillTariff, onInputNewBi
         <label className="bill-item__label" htmlFor="">Введите тариф счёта:</label>
         <FloatInput className='bill-item__input' value={tariff} onInput={onInputNewBillTariff} placeholder='###'/>
       </p>
-      <FormButton heading="Сохранить" onClick={onSave} />
-      {/* TODO: передать в Alert данные для несуществующего тарифа */}
+      <Button onClick={onSave}>Сохранить</Button>
     </div>
   );
 }

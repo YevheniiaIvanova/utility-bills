@@ -234,9 +234,10 @@ const CalculatorBills = () => {
             {totalCost && <div className="calculator-bills__total-cost title"> Итоговая цена: {totalCost}</div>}
 
             <Controls onClearAllValues={clearAllValues} 
-                      onAddButtonHandler={onAddButtonHandler}
-                      onEditButtonHandler={onEditButtonHandler}
-                      onDeleteButtonHandler={onDeleteButtonHandler}
+                      onAddButtonClick={onAddButtonHandler}
+                      onEditButtonClick={onEditButtonHandler}
+                      onDeleteButtonClick={onDeleteButtonHandler}
+                      onCalculateButtonClick={calculateTheCost}
             />
         </form>
       </div>

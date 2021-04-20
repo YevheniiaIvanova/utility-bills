@@ -2,7 +2,7 @@ import React from 'react';
 import FormTitle from '../../FormComponents/FormTitle/FormTitle';
 import FloatInput from '../../FormComponents/FormInput/FloatInput';
 import NoNumericInput from '../../FormComponents/FormInput/NoNumericInput';
-import FormButton from '../../FormComponents/FormButton/FormButton';
+import Button from '../../FormComponents/Buttons/Button';
 import './NewBill.css';
 
 
@@ -20,7 +20,7 @@ const NewBill = ({heading, billData, onSave, onInputNewBillTariff, onInputNewBil
         <label className="bill-item__label" htmlFor="">Введите тариф счёта:</label>
         <FloatInput className='bill-item__input' value={tariff} onInput={onInputNewBillTariff} placeholder='###'/>
       </p>
-      <FormButton heading="Сохранить" onClick={onSave} />
+      <Button onClick={onSave}>Сохранить</Button>
     </div>
   );
 }

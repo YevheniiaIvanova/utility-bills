@@ -1,7 +1,7 @@
 import React from 'react';
 import FormTitle from '../../FormComponents/FormTitle/FormTitle';
 import NumericInput from '../../FormComponents/FormInput/NumericInput';
-import FormButton from '../../FormComponents/FormButton/FormButton';
+import Button from '../../FormComponents/Buttons/Button';
 import './CalculatorBillsItem.css';
 
 const CalculatorBillsItem = (props) => {
@@ -34,7 +34,7 @@ const CalculatorBillsItem = (props) => {
         </label>
         <NumericInput value={previousValue} onInput={onInputPreviousValue(title)} placeholder='###'/>
       </p>
-      {isDeleteBill && <FormButton onClick={onDeleteBill(title)} heading="Удалить"/>}
+      {isDeleteBill && <Button onClick={onDeleteBill(title)}>Удалить</Button>}
     </div>
   );
 }
