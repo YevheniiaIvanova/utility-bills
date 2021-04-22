@@ -18,25 +18,26 @@
   position: relative;
 }
 .controls-panel input {
-  top: 7px;
+  top: 114px;
   left: 112px;
 }
 .controls-panel button:nth-child(2n) {
-  top: 107px;
-  right: -17px;
+  top: -84px;
+  right: -113px;
 }
 .controls-panel button:nth-child(3n) {
-  top: 104px;
-  right: -25px;
+  top: -75px;
+  right: -6px;
 }
 .controls-panel button:nth-child(4n) {
-  top: 10px;
-  left: 6px;
+  top: -67px;
+  right: -110px;
 }
 .controls-panel button:nth-child(5n) {
-  top: 119px;
-  left: 17px;
+  top: -262px;
+  left: 214px;
 }
+
 
 
 /* костыль удалить */
