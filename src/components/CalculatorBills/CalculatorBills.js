@@ -42,14 +42,32 @@ const CalculatorBills = () => {
   }
   
   const onAddButtonHandler = () => {
+    if(isEditBill) {
+      setIsEditBill(false);
+    }
+    if(isDeleteBill) {
+      setIsDeleteBill(false);
+    }
     setIsShowNewBillBlock(true);
   }
 
   const onEditButtonHandler = () => {
+    if(isDeleteBill) {
+      setIsDeleteBill(false);
+    }
+    if(isShowNewBillBlock){
+      setIsShowNewBillBlock(false);
+    }
     setIsEditBill(true);
   }
 
   const onDeleteButtonHandler = () => {
+    if(isEditBill) {
+      setIsEditBill(false);
+    }
+    if(isShowNewBillBlock){
+      setIsShowNewBillBlock(false);
+    }
     setIsDeleteBill(true);
   }
 

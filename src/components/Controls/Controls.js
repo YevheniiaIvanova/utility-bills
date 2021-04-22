@@ -43,7 +43,10 @@ const Controls = ({
       </div>
       { showControls &&
         <div className="controls-panel">
-          <RoundButton onClick={closeControlPanel(onCalculateButtonClick)} as="input" type="submit" value="Расчитать"/>
+          <RoundButton onClick={closeControlPanel(onCalculateButtonClick)} type="submit">
+          <IconWrapper><CalculateIcon/></IconWrapper>
+            Расчитать
+            </RoundButton>
           <RoundButton onClick={closeControlPanel(onClearAllValues)} >
             <IconWrapper><ClearIcon/></IconWrapper>
               Очистить
