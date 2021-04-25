@@ -41,6 +41,10 @@ const CalculatorBills = () => {
     setAlertType('');
   }
   
+  /*TODO_REVIEW: Не так чтоб это плохо, но можем быть это сделать по аналогии с алертами, через какой-то параметр типа?
+    просто получится если добавится еще одна кнопка, то к каждому обрабтчику кнопки нужно будет 
+    добавить по if еще одному, а потому еще по одному
+  */
   const onAddButtonHandler = () => {
     if(isEditBill) {
       setIsEditBill(false);
@@ -73,13 +77,27 @@ const CalculatorBills = () => {
 
 
 
-  //TODO: Добавить функционал редактирование существующего счёта
+  //TODO: Добавить функционал редактирование существующего счёта -- этот todo уже не нужен, так как функционал готов
   
   const inputPreviousValue = (title) => {
     return function(event) {
       const previousValue = event.currentTarget.value;
       setBills((bills) => { 
         const copyBills = [...bills];
+        /*TODO_REVIEW: тут есть маленькая проблема. 
+          Мы скопировали массив, но элементы массива у нас не скопированы
+          и теперь если мы изменим элемент массива copyBills, то этот же элемент в bills тоже изменится.
+          Грустно, но благодаря еще одной деструктуризации мы можем решить эту проблему.
+
+          const billIndex = copyBills.findIndex(bill => bill.title === title);
+          if (billIndex !== -1) {
+            copuBills[billIndex] = {
+              ...copuBills[billIndex],
+              previousValue: previousValue
+            }
+          }
+          return copyBills;
+        */
         const bill = copyBills.find(bill => bill.title === title);
         bill.previousValue = previousValue;
         return copyBills;
@@ -93,8 +111,19 @@ const CalculatorBills = () => {
       const currentValue = event.currentTarget.value;
       setBills((bills) => { 
         const copyBills = [...bills];
+        /*TODO_REVIEW: та же ситуация что и выше
+
+          const billIndex = copyBills.findIndex(bill => bill.title === title);
+          if (billIndex !== -1) {
+            copuBills[billIndex] = {
+              ...copuBills[billIndex],
+              currentValue: currentValue
+            }
+          }
+          return copyBills;
+        */
         const bill = copyBills.find(bill => bill.title === title);
-        bill.currentValue = currentValue;   
+        bill.currentValue = currentValue;
         return copyBills;
       });
     }
@@ -122,6 +151,13 @@ const CalculatorBills = () => {
   const clearAllValues = () => {
     setBills(() => {
       const newBills = bills.map(bill => {
+        /*TODO_REVIEW: Это можно было сделать чуть
+        return {
+          ...bill,
+          previousValue: '',
+          currentValue: ''
+        }
+        */
         const newBill = {...bill};
         newBill.previousValue = '';
         newBill.currentValue = '';
@@ -192,6 +228,7 @@ const CalculatorBills = () => {
         if(indexBill !== -1) {
           copyBills[indexBill] = {...newBill};
           return copyBills;
+          //TODO_REVIEW: этот else не обязателен и засоряет код
         } else {
           setAlertType('nonExistentValue');
         }
@@ -259,6 +296,22 @@ const CalculatorBills = () => {
             />
         </form>
       </div>
+        {/*TODO_REVIEW: слишном длинные строки я бы их сократил. Например вот так.
+          {
+            alertType==='emptyValues'
+            && 
+            <Alert
+              message='Пожалуйста, заполните все поля значениями!' 
+              title='Warning' icon='&#9888;'
+              onClick={closeAlertHandler}
+            />
+          }
+
+          Или еще неплохой вариант создать два компонента следующего вида:
+          <EmptyValuesAlert onClick={closeAlertHandler} />
+          и 
+          <NonExistentValueAlert onClick={closeAlertHandler} />
+        */}
         {alertType==='emptyValues' && <Alert message='Пожалуйста, заполните все поля значениями!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
         {alertType==='nonExistentValue' && <Alert message='Такого значения нет!' title='Warning' icon='&#9888;' onClick={closeAlertHandler}/>}
     </div>

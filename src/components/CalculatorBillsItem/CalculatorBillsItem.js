@@ -20,7 +20,7 @@ const CalculatorBillsItem = (props) => {
       <FormTitle>
         {`${title}: текущий тариф ${tariff} грн`}
       </FormTitle>
-        
+        {/*TODO_REVIEW: пустые строки вот так лучше не оставлять*/}
    
       <p className="bill-item__content">
         <label className="bill-item__label">
