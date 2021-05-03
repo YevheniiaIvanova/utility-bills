@@ -3,6 +3,7 @@ import './FormInput.css';
 
 const NumericInput = ({onInput, value, className='',...otherProps}) => {
 
+  /*TODO_REVIEW: последить за оступами */
   const inputHandler = (event) => {
    const isValid = event.currentTarget.value.match(/^[0-9]*$/);
    if(isValid) {
