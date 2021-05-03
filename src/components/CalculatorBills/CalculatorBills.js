@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import BillsDataService from '../../services/billsData-service';
 import config from '../../config';
 import CalculatorBillsList from '../CalculatorBillsList';
 import Controls from '../Controls';
@@ -9,7 +10,7 @@ import EditBill from '../EditBill';
 import './CalculatorBills.css';
 
 
-const {garbageBills, homeMaintenance, rentBills, waterTariff, electricityTariff} = config;
+const {garbageBills, homeMaintenance, rentBills} = config;
 
 function calculateTheCostWithTariff(bill) {
   const {previousValue, currentValue, tariff} = bill; 
@@ -24,17 +25,23 @@ function calculateFullCost(...costBills) {
 
 const CalculatorBills = () => {
   
-  const [bills, setBills] = useState([
-    {title: 'Вода', tariff: waterTariff, previousValue: '', currentValue: ''},
-    {title: 'Электричество', tariff: electricityTariff, previousValue: '', currentValue: ''},
-  ]);
-
+  const [bills, setBills] = useState([]);
   const [totalCost, setTotalCost] = useState('');
   const [alertType, setAlertType] = useState('');
   const [isShowNewBillBlock, setIsShowNewBillBlock] = useState(false);
   const [newBill, setNewBill] = useState({title: '', tariff: '', previousValue: '', currentValue: '' });
   const [isDeleteBill, setIsDeleteBill] = useState(false);
   const [isEditBill, setIsEditBill] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await BillsDataService.getData();
+      const bills = response.data.map(bill => ({...bill, previousValue: '', currentValue: ''}));
+      setBills(() => bills);
+    }
+    fetchData();
+  }, []);
+
 
   //Buttons Handlers
   const closeAlertHandler = () => {
